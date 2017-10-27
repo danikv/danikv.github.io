@@ -2,7 +2,7 @@
   "name": "my-locations",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://danikv.github.io/MyLocations",
+  "homepage": "https://danikv.github.io",
   "dependencies": {
     "gh-pages": "^1.0.0",
     "google-maps-react": "^1.1.0",

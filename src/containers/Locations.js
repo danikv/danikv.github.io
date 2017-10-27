@@ -1,12 +1,12 @@
-import React, { 
-    Component
-} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ViewList from '../components/ViewList'
 import {
     Glyphicon,
-    Button
+    Button,
+    Modal,
+    Form
 } from 'react-bootstrap'
 import { BasicAddModalWithSelect } from '../components/BasicModals'
 var groupArray = require('group-array')
@@ -17,6 +17,7 @@ class Locations extends Component
         super(props)
         this.state = {
             showModal: false,
+            showDisplayModal: false,
             sorted: 'UnSorted',
             categoryFilter: '',
             groupedByCategory: 'UnGrouped',
@@ -37,8 +38,27 @@ class Locations extends Component
     }
 
     onClick(location) {
-        this.props.changeMapCetner(location.lat, location.long)
+        this.locationClicked = location
+        this.setState({
+            showDisplayModal: true
+        })
         this.props.onClick(location)
+    }
+
+    displayLocationOnMap() {
+        this.closeDisplayModal()
+        this.props.changeMapCetner(this.locationClicked.lat, this.locationClicked.long)
+    }
+
+    displayLocationOnModal() {
+        this.closeDisplayModal()
+        console.log(this.locationClicked)
+    }
+
+    closeDisplayModal() {
+        this.setState({
+            showDisplayModal: false
+        })
     }
 
     filterClicked() {
@@ -147,6 +167,8 @@ class Locations extends Component
         return locations
     }
 
+
+
     onSubmit(event) {
         event.preventDefault()
         this.onSend()
@@ -161,9 +183,9 @@ class Locations extends Component
     render() {
         return (
             <div>
-                <Button onClick={() => this.openModal() } bsStyle="primary">
+                <Button onClick={() => this.openModal() }>
                     <Glyphicon glyph="filter">
-                        Filter Or Sort Locations
+                        Filter
                     </Glyphicon>
                 </Button>
                 <BasicAddModalWithSelect 
@@ -184,6 +206,16 @@ class Locations extends Component
                         displayFunction={ (location) => this.displayLocation(location) }
                     />
                 </div>
+                <Modal show={ this.state.showDisplayModal } onHide={ () => this.setState({ showDisplayModal: false }) }>
+                    <Form>
+                        <Button onClick={ () => this.displayLocationOnMap() }>
+                            Map
+                        </Button>
+                        <Button onClick={ () => this.displayLocationOnModal() }>
+                            View
+                        </Button>
+                    </Form>
+                </Modal>
             </div>
         )
     }

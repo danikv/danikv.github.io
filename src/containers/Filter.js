@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
-    Glyphicon,
     ToggleButton,
-    FormGroup,
     FormControl,
     ButtonGroup,
     ToggleButtonGroup
 } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { BasicAddModalWithSelect } from '../components/BasicModals'
 import { sortFilter, categoryFilter, groupFilter } from '../actions/FilterActions'
 
 class Filter extends Component 
@@ -81,9 +78,9 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const FilterModal = connect(
+const FilterContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(Filter)
 
-export default FilterModal
+export default FilterContainer

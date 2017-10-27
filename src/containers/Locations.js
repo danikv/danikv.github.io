@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ViewList from '../components/ViewList'
 import {
-    Glyphicon,
     Button,
     Modal,
     FormGroup,
@@ -11,7 +10,7 @@ import {
     Form
 } from 'react-bootstrap'
 import BasicRemoveForm from '../components/BasicRemoveForm'
-import FilterModal from './FilterModal'
+import FilterContainer from './Filter'
 
 var groupArray = require('group-array')
 
@@ -23,6 +22,13 @@ class Locations extends Component
             showDisplayModal: false,
             showViewModal: false,
             filterdLocations: []
+        }
+        this.locationClicked = {
+            name: '',
+            address: '',
+            lat: 0,
+            long: 0,
+            category: ''
         }
     }
     
@@ -128,20 +134,20 @@ class Locations extends Component
     deleteFormConfiguration() {
         return [{
             name: 'name',
-            value: this.state.name
+            value: this.locationClicked.name
         },{
             name: 'address',
-            value: this.state.address
+            value: this.locationClicked.address
         },{
             name: 'latitude',
-            value: this.state.lat
+            value: this.locationClicked.lat
         },{
             name: 'longitude',
-            value: this.state.long
+            value: this.locationClicked.long
         },
         {
             name: 'category',
-            value: this.state.category
+            value: this.locationClicked.category
         }]
     }
 
@@ -159,7 +165,7 @@ class Locations extends Component
     render() {
         return (
             <div>
-                <FilterModal />
+                <FilterContainer />
                 <div style={{ marginTop: '20px' }} >
                     <ViewList
                         items={ this.state.filterdLocations }

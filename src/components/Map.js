@@ -12,7 +12,8 @@ const Map = (props) => (
         defaultZoom={ props.defaultZoom }
         onClick={ (mapLocation) => {
             props.onMapClick(mapLocation.lat, mapLocation.lng)
-        }} >
+        }}
+    >
 
         { props.locations.map(location => (
             <MapMarker key={ location.key }

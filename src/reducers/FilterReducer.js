@@ -3,7 +3,6 @@ const categoryReducer = (state = {
     sortFilter: false,
     categoryFilter: ''
 }, action) => {
-    console.log(action)
     switch(action.type){
         case 'GROUP_FILTER':
             return {

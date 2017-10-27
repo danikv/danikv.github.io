@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
     ToggleButton,
-    FormControl,
     ButtonGroup,
     ToggleButtonGroup
 } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { sortFilter, categoryFilter, groupFilter } from '../actions/FilterActions'
+import Select from '../components/Select'
 
 class Filter extends Component 
 {
@@ -23,6 +23,15 @@ class Filter extends Component
         this.props.sortAction(!this.props.filter.sortFilter)
     }
 
+    selectOptions() {
+        return {
+            onChange: this.handleCategoryFilterChange.bind(this),
+            value: this.props.filter.categoryFilter,
+            options: this.props.categories,
+            defaultValue: 'Select Category To Filter The List Below'
+        }
+    }
+
     render() {
         return (
             <ButtonGroup justified style={{ width: '100%' }}>
@@ -36,13 +45,7 @@ class Filter extends Component
                         Group By
                     </ToggleButton>
                 </ToggleButtonGroup>
-                <FormControl componentClass="select" onChange={ (event) => this.handleCategoryFilterChange(event) }
-                    placeholder="CategoryFilter" style={{ display: 'inline-block' , width: '100%'}}>
-                    <option value=''> Select Category To Filter The List Below </option>
-                    { this.props.categories.map(x => (
-                        <option value={ x } key={ x } > { x } </option>
-                    ))}
-                </FormControl>
+                <Select { ...this.selectOptions() } />
             </ButtonGroup>
         )
     }

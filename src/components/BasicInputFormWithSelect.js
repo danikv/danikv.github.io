@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import Input from './Input'
-import Select from './Select'
+import SelectForm from './SelectForm'
 
 const BasicInputFormWithSelect = ({ configuration, onSubmit }) => (
     <Form onSubmit={ (event) => onSubmit(event) }>
@@ -9,7 +9,7 @@ const BasicInputFormWithSelect = ({ configuration, onSubmit }) => (
             <Input key={ item.id } { ...item } />
         ))}
         { configuration.selects.map(item => (
-            <Select key={ item.id } {...item} />
+            <SelectForm key={ item.id } {...item} />
         ))}
     </Form>
 )

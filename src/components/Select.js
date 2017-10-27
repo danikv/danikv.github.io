@@ -1,24 +1,13 @@
 import React from 'react'
-import { startCase } from 'lodash'
-import {
-    FormControl,
-    FormGroup,
-    ControlLabel,
-    HelpBlock
-} from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 
-const Select = ({ id, validation, onChange, options, value}) => (
-    <FormGroup controlId="formBasicText" validationState={ validation() }>
-        <ControlLabel>Enter {startCase(id)}</ControlLabel>
-        <FormControl componentClass="select" placeholder="select" value={ value } onChange={ (event) => onChange(event) } >
-            <option value=""> Select {startCase(id)}  </option>
-            { options.map(item => (
-                <option value={ item } key={ item }> { item } </option>
-            ))}
-        </FormControl>
-        <FormControl.Feedback />
-        <HelpBlock>{startCase(id)} cannot be empty</HelpBlock>
-    </FormGroup>
+const Select = ({onChange, defaultValue, options, value}) => (
+    <FormControl componentClass="select" placeholder="select" value={ value } onChange={ (event) => onChange(event) } >
+        <option value=""> { defaultValue } </option>
+        { options.map(item => (
+            <option value={ item } key={ item }> { item } </option>
+        ))}
+    </FormControl>
 )
 
 export default Select

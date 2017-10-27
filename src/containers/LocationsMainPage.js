@@ -16,8 +16,8 @@ const LocationMainPage = BasicOperations(
 )
 
 const mapStyle = {
-    width: '65em',
-    height: '60em'
+    width: '48%',
+    height: '86vh'
 }
 
 const listStype = {
@@ -83,11 +83,12 @@ class LocationsMainPage extends MainPageComponent
                     <LocationMainPage { ...this.locationMainPageConfiguration() } />
                 </div>
                 <div style={ mapStyle } >
-                    <LocationMap
-                        onChange={ this.onChange.bind(this) }
-                        center={ this.state.center }
-                        defaultZoom={ 11 }
-                        onMapClick={ (lat,long) => this.onMapClick(lat,long) } />
+                        <LocationMap
+                                onChange={ this.onChange.bind(this) }
+                                center={ this.state.center }
+                                defaultZoom={ 11 }
+                                onMapClick={ (lat,long) => this.onMapClick(lat,long) } />
+                                
                 </div>
             </div>
         )

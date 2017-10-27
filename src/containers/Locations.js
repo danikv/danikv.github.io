@@ -6,9 +6,13 @@ import {
     Glyphicon,
     Button,
     Modal,
+    FormGroup,
+    ControlLabel,
     Form
 } from 'react-bootstrap'
-import { BasicAddModalWithSelect } from '../components/BasicModals'
+import BasicRemoveForm from '../components/BasicRemoveForm'
+import FilterModal from './FilterModal'
+
 var groupArray = require('group-array')
 
 class Locations extends Component
@@ -16,13 +20,64 @@ class Locations extends Component
     constructor(props) {
         super(props)
         this.state = {
-            showModal: false,
             showDisplayModal: false,
-            sorted: 'UnSorted',
-            categoryFilter: '',
-            groupedByCategory: 'UnGrouped',
-            filteredLocations: []
+            showViewModal: false,
+            filterdLocations: []
         }
+    }
+    
+    componentDidMount() {
+        this.setLocations(this.props.locations)
+    }
+
+    setLocations(locations) {
+        this.setState({
+            filterdLocations: locations
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.filter !== this.props.filter || nextProps.location !== this.props.locations) {
+            this.filterAndSetLocation(nextProps.locations, nextProps.filter)
+        }
+    }
+
+    filterAndSetLocation(locations, filter) {
+        this.setLocations(this.filter(locations,filter))
+    }
+
+    filter(locations, filter) {
+        let filterdList = locations.slice()
+        filterdList = this.filterByCategory(filterdList, filter.categoryFilter)
+        filterdList = this.sortLocations(filterdList, filter.sortFilter)
+        filterdList = this.groupByCategory(filterdList, filter.groupFilter)
+        return filterdList
+    }
+
+    filterByCategory(locations, category) {
+        if(category !== '') {
+            return locations.filter(location => location.category === category)
+        }
+        return locations
+    }
+
+    sortLocations(locations, sort) {
+        if(sort === true) {
+            return locations.sort((a,b) => {
+                return a.name > b.name
+            })
+        }
+        return locations
+    }
+
+    groupByCategory(locations, group) {
+        if(group === true) {
+            let groupObject = groupArray(locations, 'category')
+            let list = []
+            Object.values(groupObject).map(x => list = list.concat(x));
+            return list
+        }
+        return locations
     }
 
     displayLocation(location) {
@@ -52,68 +107,15 @@ class Locations extends Component
 
     displayLocationOnModal() {
         this.closeDisplayModal()
-        console.log(this.locationClicked)
+        this.setState({
+            showViewModal: true
+        })
     }
 
     closeDisplayModal() {
         this.setState({
             showDisplayModal: false
         })
-    }
-
-    filterClicked() {
-        this.setState({
-            showModal: true
-        })
-    }
-
-    close() {
-        this.setState({
-            showModal: false
-        })
-    }
-
-    handleCategoryFilterChange(event) {
-        this.setState({
-            categoryFilter: event.target.value
-        })
-    }
-
-    handleGroupedChange(event) {
-        this.setState({
-            groupedByCategory: event.target.value
-        })
-    }
-
-    handleSortedChanged(event) {
-        this.setState({
-            sorted: event.target.value
-        })
-    }
-
-    inputFormConfiguration() {
-        return {
-            inputs: [],
-            selects: [{
-                validation: () => {},
-                id: 'Category Filter',
-                onChange: (event) => this.handleCategoryFilterChange(event),
-                options: this.props.categories,
-                value: this.state.categoryFilter
-            },{
-                validation: () => {},
-                id: 'Grouped By Category',
-                onChange: (event) => this.handleGroupedChange(event),
-                options: ['Grouped' , 'UnGrouped'],
-                value: this.state.groupedByCategory
-            },{
-                validation: () => {},
-                id: 'Sorted By Alphabetic Order',
-                onChange: (event) => this.handleSortedChanged(event),
-                options: ['Sorted' , 'UnSorted'],
-                value: this.state.sorted
-            }]
-        }
     }
 
     onSend() {
@@ -123,98 +125,72 @@ class Locations extends Component
         this.close()
     }
 
-    componentDidMount() {
-        this.setState({
-            filteredLocations: this.filter(this.props.locations)
-        })
+    deleteFormConfiguration() {
+        return [{
+            name: 'name',
+            value: this.state.name
+        },{
+            name: 'address',
+            value: this.state.address
+        },{
+            name: 'latitude',
+            value: this.state.lat
+        },{
+            name: 'longitude',
+            value: this.state.long
+        },
+        {
+            name: 'category',
+            value: this.state.category
+        }]
     }
-
-    componentWillReceiveProps(NextProps) {
-        this.setState({
-            filteredLocations: this.filter(NextProps.locations)
-        })
-    }
-
-    filter(locations) {
-        let filterdList = this.filterByCategory(locations,this.state.categoryFilter)
-        filterdList = this.sortLocations(filterdList, this.state.sorted)
-        filterdList = this.groupByCategory(filterdList, this.state.groupedByCategory)
-        return filterdList
-    }
-
-    filterByCategory(locations, category) {
-        if(category !== '') {
-            return locations.filter(location => location.category === this.state.categoryFilter)
-        }
-        return locations
-    }
-
-    sortLocations(locations, sort) {
-        if(sort === 'Sorted')
-            return locations.sort((a,b) => {
-                return a.name > b.name
-            })
-        return locations
-    }
-
-    groupByCategory(locations, group) {
-        if(this.state.groupedByCategory === 'Grouped') {
-            let groupObject = groupArray(locations, 'category')
-            let list = []
-            Object.values(groupObject).map(x => list = list.concat(x));
-            return list
-        }
-        return locations
-    }
-
-
 
     onSubmit(event) {
         event.preventDefault()
         this.onSend()
     }
 
-    openModal() {
+    closeViewModal() {
         this.setState({
-            showModal: true
+            showViewModal: false
         })
     }
 
     render() {
         return (
             <div>
-                <Button onClick={() => this.openModal() }>
-                    <Glyphicon glyph="filter">
-                        Filter
-                    </Glyphicon>
-                </Button>
-                <BasicAddModalWithSelect 
-                    title='Filter Location'
-                    showModal={ this.state.showModal }
-                    closeModal={ () => this.close() }
-                    bodyConfiguration={ this.inputFormConfiguration() }
-                    onSend={ () => this.onSend() }
-                    validateInput={ () => {return true} } 
-                    onSubmit={ (event) => this.submitItem(event) }
-                    onEntered={ () => {} }
-                />
+                <FilterModal />
                 <div style={{ marginTop: '20px' }} >
                     <ViewList
-                        items={ this.state.filteredLocations }
+                        items={ this.state.filterdLocations }
                         onClick={ (location) => this.onClick(location) }
                         getKey={ (location) => { return location.key } }
                         displayFunction={ (location) => this.displayLocation(location) }
                     />
                 </div>
-                <Modal show={ this.state.showDisplayModal } onHide={ () => this.setState({ showDisplayModal: false }) }>
-                    <Form>
-                        <Button onClick={ () => this.displayLocationOnMap() }>
-                            Map
-                        </Button>
-                        <Button onClick={ () => this.displayLocationOnModal() }>
-                            View
-                        </Button>
-                    </Form>
+                <Modal show={ this.state.showDisplayModal } onHide={ () => this.closeDisplayModal() }>
+                    <Modal.Title>
+                        View Location
+                    </Modal.Title>
+                    <Modal.Body>
+                        <Form>
+                            <FormGroup key={ 1 } controlId="formBasicText">
+                                <ControlLabel>Do you want to see the item in the map or in the view ? </ControlLabel>
+                            </FormGroup>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={ () => this.displayLocationOnMap() } pullLeft> Map </Button>
+                        <Button onClick={ () => this.displayLocationOnModal() } pullRight> View </Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal show={ this.state.showViewModal } onHide={ () => this.closeViewModal() }>
+                    <Modal.Title>
+                        View Location
+                    </Modal.Title>
+                    <Modal.Body>
+                        <BasicRemoveForm configuration={ this.deleteFormConfiguration() } />
+                    </Modal.Body>
                 </Modal>
             </div>
         )
@@ -222,27 +198,23 @@ class Locations extends Component
 }
 
 Locations.propTypes = {
-    locations: PropTypes.array.isRequired,
     categories: PropTypes.array.isRequired,
+    locations: PropTypes.array.isRequired,
     onClick: PropTypes.func.isRequired,
-    changeMapCetner: PropTypes.func.isRequired
+    changeMapCetner: PropTypes.func.isRequired,
+    filter: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state, props) => {
     return {
+        categories: state.categoryReducer,
         locations: state.locationReducer,
-        categories: state.categoryReducer
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
+        filter: state.filterReducer
     }
 }
 
 const LocationsContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )(Locations)
 
 export default LocationsContainer

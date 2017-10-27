@@ -12,7 +12,7 @@ const navItemStyle = {
 }
 
 const BottomNavbar = () => (
-  <Navbar fixedBottom>
+  <Navbar fixedBottom staticTop>
     <Nav bsStyle="tabs">
       <LinkContainer to='/locations' style={ navItemStyle }>
         <NavItem>

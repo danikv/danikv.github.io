@@ -23,7 +23,7 @@ const BasicModal = (Body) => ({ showModal, closeModal, bodyConfiguration, onSend
 
 const InputModal = BasicModal(BasicInputForm)
 
-const RemoveModal = BasicModal(BasicRemoveForm)
+const LabelModal = BasicModal(BasicRemoveForm)
 
 const InputModalWithSelect = BasicModal(BasicInputFormWithSelect)
 
@@ -34,7 +34,7 @@ export const BasicAddModal = (props) => (
 export const BasicEditModal = InputModal
 
 export const BasicRemoveModal = (props) => (
-    <RemoveModal validateInput={ () => { return true }} { ...props } />
+    <LabelModal validateInput={ () => { return true }} { ...props } />
 )
 
 export const BasicAddModalWithSelect = InputModalWithSelect

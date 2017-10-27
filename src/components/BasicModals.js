@@ -37,8 +37,6 @@ export const BasicRemoveModal = (props) => (
     <RemoveModal validateInput={ () => { return true }} { ...props } />
 )
 
-export const BasicAddModalWithSelect = (props) => (
-    <InputModalWithSelect onEntered={ () => {} } { ...props } />
-)
+export const BasicAddModalWithSelect = InputModalWithSelect
 
 export const BasicEditModalWithSelect = InputModalWithSelect

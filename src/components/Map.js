@@ -2,16 +2,19 @@ import React from 'react';
 import GoogleMap from 'google-map-react';
 import MapMarker from './MapMarker'
 
-const Map = ({ defaultLocation, defaultZoom, locations, onMapClick }) => (
+const Map = (props) => (
     <GoogleMap
         bootstrapURLKeys={{
             key: 'AIzaSyC9qRIsrOUlbDtuJUiJGRBbfogIn4PxER4'
         }}
-        defaultCenter={ defaultLocation }
-        defaultZoom={ defaultZoom }
-        onClick={ (mapLocation) => onMapClick(mapLocation.lat, mapLocation.lng)} >
+        onChange={ (mapLocation) => props.onChange(mapLocation) }
+        center={ props.center }
+        defaultZoom={ props.defaultZoom }
+        onClick={ (mapLocation) => {
+            props.onMapClick(mapLocation.lat, mapLocation.lng)
+        }} >
 
-        { locations.map(location => (
+        { props.locations.map(location => (
             <MapMarker key={ location.key }
                 lat={location.lat}
                 lng={location.long}

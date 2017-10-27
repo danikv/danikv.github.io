@@ -85,7 +85,8 @@ class Location extends Component
         this.setState({ 
             name: "",
             address: "",
-            coordinates: 0,
+            lat: 0,
+            long:0,
             category: ""
         })
         this.props.closeModal()

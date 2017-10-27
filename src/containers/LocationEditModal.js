@@ -40,37 +40,42 @@ class EditModal extends Location
                 validation: () => this.validateName(),
                 id: 'name',
                 onChange: (event) => this.handleNameChange(event),
-                value: this.state.name
+                value: this.state.name,
+                type: "text"
             },
             {
                 validationMessage: 'address cannot be empry',
                 validation: () => this.validateAddress(),
                 id: 'address',
                 onChange: (event) => this.handleAddressChange(event),
-                value: this.state.address
+                value: this.state.address,
+                type: "text"
             },
             {
                 validationMessage: 'latitude cannot be empry',
                 validation: () => this.validateLatitude(),
                 id: 'Latitude',
                 onChange: (event) => this.handleLatitudeChange(event),
-                value: this.state.lat
+                value: this.state.lat,
+                type: "number"
             },
             {
                 validationMessage: 'longitude cannot be empry',
                 validation: () => this.validateLongitude(),
                 id: 'Longitude',
                 onChange: (event) => this.handleLongitudeChange(event),
-                value: this.state.long
+                value: this.state.long,
+                type: "number"
             }],
-            select: {
+            selects: [{
                 validationMessage: 'category cannot be empry',
                 validation: () => this.validateCategory(),
                 id: 'category',
                 onChange: (event) => this.handleCategoryChange(event),
                 options: this.props.categories,
-                value: this.state.category
-            }
+                value: this.state.category,
+                type: "text"
+            }]
         }
     }
 

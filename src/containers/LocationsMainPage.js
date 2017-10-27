@@ -15,23 +15,77 @@ const LocationMainPage = BasicOperations(
     LocationsContainer
 )
 
+const mapStyle = {
+    width: '65em',
+    height: '60em'
+}
+
+const listStype = {
+    width: '50%'
+}
+
 class LocationsMainPage extends MainPageComponent
 {
+    constructor(props) {
+        super(props)
+        this.state = {
+            ...this.state,
+            lat: 0,
+            long: 0,
+            center: [
+                32,
+                34.8
+            ]
+        }
+    }
 
-    onMapClick(lat,long) {
-        console.log(lat + ' : ' + long)
+    locationMainPageConfiguration() {
+        let configuration = this.mainPageConfiguration()
+        configuration.add = {
+            ...configuration.add,
+            lat: this.state.lat,
+            long: this.state.long
+        }
+        configuration.view = {
+            ...configuration.view,
+            changeMapCetner: this.changeMapCetner.bind(this)
+        }
+        return configuration
+    }
+
+    onChange(location) {
+        this.setState({
+            center: location.center
+        })
+    }
+
+    onMapClick(lat, long) {
+        this.setState({
+            lat: lat,
+            long: long
+        })
+    }
+
+    changeMapCetner(lat, long) {
+        this.setState({
+            center: [
+                lat,
+                long
+            ]
+        })
     }
 
     render() {
         return(
             <div>
                 <BasicNavbar configuration={ this.navBarConfiguration() } />
-                <div style={{width: '50%', height: '100%'}} className="pull-right">
-                        <LocationMainPage { ...this.mainPageConfiguration() } />
+                <div style={ listStype } className="pull-right">
+                    <LocationMainPage { ...this.locationMainPageConfiguration() } />
                 </div>
-                <div style={{width: '65em', height: '55em', marginright: '10px'}} >
-                    <LocationMap 
-                        defaultLocation={{ lat: 32, lng:34.8 }} 
+                <div style={ mapStyle } >
+                    <LocationMap
+                        onChange={ this.onChange.bind(this) }
+                        center={ this.state.center }
                         defaultZoom={ 11 }
                         onMapClick={ (lat,long) => this.onMapClick(lat,long) } />
                 </div>

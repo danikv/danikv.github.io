@@ -9,7 +9,6 @@ import Location from '../components/Location'
 class AddModal extends Location
 {
     addItem() {
-
         const location = {
             key: v4(),
             name: this.state.name,
@@ -36,39 +35,51 @@ class AddModal extends Location
                 validation: () => this.validateName(),
                 id: 'name',
                 onChange: (event) => this.handleNameChange(event),
-                value: this.state.name
+                value: this.state.name,
+                type: "text"
             },
             {
                 validationMessage: 'address cannot be empry',
                 validation: () => this.validateAddress(),
                 id: 'address',
                 onChange: (event) => this.handleAddressChange(event),
-                value: this.state.address
+                value: this.state.address,
+                type: "text"
             },
             {
                 validationMessage: 'latitude cannot be empry',
                 validation: () => this.validateLatitude(),
                 id: 'Latitude',
                 onChange: (event) => this.handleLatitudeChange(event),
-                value: this.state.lat
+                value: this.state.lat,
+                type: "number"
             },
             {
                 validationMessage: 'longitude cannot be empry',
                 validation: () => this.validateLongitude(),
                 id: 'Longitude',
                 onChange: (event) => this.handleLongitudeChange(event),
-                value: this.state.long
+                value: this.state.long,
+                type: "number"
             }
             ],
-            select: {
+            selects: [{
                 validationMessage: 'category cannot be empry',
                 validation: () => this.validateCategory(),
                 id: 'category',
                 onChange: (event) => this.handleCategoryChange(event),
                 options: this.props.categories,
-                value: this.state.category
-            }
+                value: this.state.category,
+                type: "text"
+            }]
         }
+    }
+
+    open() {
+        this.setState({
+            lat: this.props.lat,
+            long: this.props.long
+        })
     }
 
     render() {
@@ -80,7 +91,8 @@ class AddModal extends Location
                 bodyConfiguration={ this.inputFormConfiguration() }
                 onSend={ () => this.addItem() }
                 validateInput={ () => this.validateInput() }
-                onSubmit={ (event) => this.submitItem(event) } />      
+                onSubmit={ (event) => this.submitItem(event) }
+                onEntered={ () => this.open() } />      
         )
     }
 }
@@ -88,7 +100,9 @@ class AddModal extends Location
 AddModal.propTypes = {
     onAdd: PropTypes.func.isRequired,
     showModal: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired
+    closeModal: PropTypes.func.isRequired,
+    lat: PropTypes.number.isRequired,
+    long: PropTypes.number.isRequired
 }
 
 const mapStateToProps = (state, props) => {

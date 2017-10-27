@@ -8,7 +8,9 @@ const BasicInputFormWithSelect = ({ configuration, onSubmit }) => (
         { configuration.inputs.map(item => (
             <Input key={ item.id } { ...item } />
         ))}
-        <Select { ...configuration.select } />
+        { configuration.selects.map(item => (
+            <Select key={ item.id } {...item} />
+        ))}
     </Form>
 )
 

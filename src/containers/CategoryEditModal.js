@@ -33,7 +33,8 @@ class EditModal extends Category
             validation: () => this.validateCategory(),
             id: 'category',
             onChange: (event) => this.categoryChange(event),
-            value: this.state.category
+            value: this.state.category,
+            type: "text"
         }]
     }
 

@@ -3,20 +3,29 @@ import { LinkContainer } from 'react-router-bootstrap'
 import {
   Nav,
   Navbar,
-  NavItem
+  NavItem,
+  Glyphicon
 } from 'react-bootstrap'
+
+const navItemStyle = {
+  width: '40em'
+}
 
 const BottomNavbar = () => (
   <Navbar fixedBottom>
     <Nav bsStyle="tabs">
-      <LinkContainer to='/locations'>
+      <LinkContainer to='/locations' style={ navItemStyle }>
         <NavItem>
-          Locations
+          <Glyphicon glyph="globe">
+              Locations
+          </Glyphicon>
         </NavItem>
       </LinkContainer>
-      <LinkContainer to='/categories'>
+      <LinkContainer to='/categories' style={ navItemStyle }>
           <NavItem>
-            Categories
+            <Glyphicon glyph="flag">
+              Categories
+            </Glyphicon>
           </NavItem>
       </LinkContainer>
     </Nav>

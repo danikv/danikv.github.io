@@ -5,6 +5,7 @@ import ViewList from '../components/ViewList'
 import FilterContainer from './Filter'
 import { LabeledModalWithoutButtons, LabeledModalWithMultipleButtons } from '../components/BasicModals'
 import { locationLabaledFormConfiguration } from './utils/CommonConfiguration'
+import vibrate from '../Vibration'
 
 var groupArray = require('group-array')
 
@@ -97,6 +98,7 @@ class Locations extends Component
         this.setState({
             showDisplayModal: true
         })
+        vibrate(1000)
         this.props.onClick(location)
     }
 

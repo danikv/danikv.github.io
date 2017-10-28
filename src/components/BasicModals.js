@@ -4,28 +4,32 @@ import {
     Button,
 } from 'react-bootstrap'
 import BasicInputForm from './BasicInputForm'
-import BasicRemoveForm from './BasicRemoveForm'
+import BasicLabelForm from './BasicLabelForm'
 import BasicInputFormWithSelect from './BasicInputFormWithSelect'
 
-const BasicModal = (Body) => ({ showModal, closeModal, bodyConfiguration, onSend, onEntered, validateInput, title, onSubmit }) => (
+const BasicModal = (Body,Footer) => ({ showModal, closeModal, bodyConfiguration, footerConfiguration, onEntered, title }) => (
     <Modal show={ showModal } onEntered={() => onEntered() } onHide={ () => closeModal() }>
         <Modal.Header closeButton>
             <Modal.Title> { title } </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <Body configuration={ bodyConfiguration } onSubmit={ onSubmit } />
+            <Body { ...bodyConfiguration } />
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={ (event) => onSend(event) } disabled={ !validateInput() }> Save </Button>
+            <Footer { ...footerConfiguration } />
         </Modal.Footer>
     </Modal>
 )
 
-const InputModal = BasicModal(BasicInputForm)
+const SaveButton = (props) => (
+    <Button { ...props } > Save </Button>
+)
 
-const LabelModal = BasicModal(BasicRemoveForm)
+const InputModal = BasicModal(BasicInputForm, SaveButton)
 
-const InputModalWithSelect = BasicModal(BasicInputFormWithSelect)
+const LabelModal = BasicModal(BasicLabelForm, SaveButton)
+
+const InputModalWithSelect = BasicModal(BasicInputFormWithSelect, SaveButton)
 
 export const BasicAddModal = (props) => (
     <InputModal onEntered={ () => {} } { ...props } />
@@ -34,8 +38,18 @@ export const BasicAddModal = (props) => (
 export const BasicEditModal = InputModal
 
 export const BasicRemoveModal = (props) => (
-    <LabelModal validateInput={ () => { return true }} { ...props } />
+    <LabelModal footerConfiguration={{...props.footerConfiguration, disabled: false }} { ...props } />
 )
+
+export const LabeledModalWithoutButtons = BasicModal(BasicLabelForm, ((props) => <div/>))
+
+const MultipleButtons = (props) => (
+    props.items.map(item => (
+        <Button key={ item.name } { ...item.configuration }> { item.name } </Button>
+    ))
+)
+
+export const LabeledModalWithMultipleButtons = BasicModal(BasicLabelForm,MultipleButtons)
 
 export const BasicAddModalWithSelect = InputModalWithSelect
 

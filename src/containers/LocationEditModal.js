@@ -4,11 +4,13 @@ import { connect } from 'react-redux'
 import { editLocation } from '../actions/LocationActions'
 import { BasicEditModalWithSelect } from '../components/BasicModals'
 import Location from '../components/Location'
+import { locationInputFormConfiguration } from './utils/CommonConfiguration'
 
 class EditModal extends Location 
 {
     editItem() {
         const location = {
+            key: this.oldValue.key,
             name: this.state.name,
             address: this.state.address,
             lat: this.state.lat,
@@ -34,49 +36,19 @@ class EditModal extends Location
     }
 
     inputFormConfiguration() {
+        return locationInputFormConfiguration(this,
+            this.state.name,
+            this.state.address,
+            this.state.lat,
+            this.state.long,
+            this.state.category)
+    }
+
+    footerConfiguration() {
         return {
-            inputs: [{
-                validationMessage: 'name cannot be empry',
-                validation: () => this.validateName(),
-                id: 'name',
-                onChange: (event) => this.handleNameChange(event),
-                value: this.state.name,
-                type: "text"
-            },
-            {
-                validationMessage: 'address cannot be empry',
-                validation: () => this.validateAddress(),
-                id: 'address',
-                onChange: (event) => this.handleAddressChange(event),
-                value: this.state.address,
-                type: "text"
-            },
-            {
-                validationMessage: 'latitude cannot be empry',
-                validation: () => this.validateLatitude(),
-                id: 'Latitude',
-                onChange: (event) => this.handleLatitudeChange(event),
-                value: this.state.lat,
-                type: "number"
-            },
-            {
-                validationMessage: 'longitude cannot be empry',
-                validation: () => this.validateLongitude(),
-                id: 'Longitude',
-                onChange: (event) => this.handleLongitudeChange(event),
-                value: this.state.long,
-                type: "number"
-            }],
-            selects: [{
-                validationMessage: 'category cannot be empry',
-                validation: () => this.validateCategory(),
-                id: 'category',
-                onChange: (event) => this.handleCategoryChange(event),
-                options: this.props.categories,
-                value: this.state.category,
-                type: "text"
-            }]
-        }
+            onClick: this.editItem.bind(this),
+            disabled: !this.validateInput() 
+        } 
     }
 
     render() {
@@ -86,10 +58,9 @@ class EditModal extends Location
                 showModal={ this.props.showModal }
                 closeModal={ () => this.close() }
                 bodyConfiguration={ this.inputFormConfiguration() }
-                onSend={ () => this.editItem() }
-                validateInput={ () => this.validateInput() } 
-                onEntered={ () => this.open() }
-                onSubmit={ (event) => this.submitItem(event) } />      
+                footerConfiguration={ this.footerConfiguration() }
+                onEntered={ this.open.bind(this) }
+                 />      
         )
     }
 }

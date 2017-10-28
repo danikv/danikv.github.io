@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { addCategory } from '../actions/CategoryActions'
 import { BasicAddModal } from '../components/BasicModals'
 import Category from '../components/Category'
+import { categoryInputFormConfiguration } from './utils/CommonConfiguration'
 
 class AddModal extends Category 
 {
@@ -13,14 +14,15 @@ class AddModal extends Category
     }
     
     inputFormConfiguration() {
-        return [{
-            validationMessage: 'category cannot be empty or exsiting category',
-            validation: () => this.validateCategory(),
-            id: 'category',
-            onChange: (event) => this.categoryChange(event),
-            value: this.state.category,
-            type: "text"
-        }]
+        return categoryInputFormConfiguration(this,
+            this.state.category)
+    }
+
+    footerConfiguration() {
+        return {
+            onClick: this.addItem.bind(this),
+            disabled: !this.validateInput()
+        }
     }
 
     submitItem(event) {
@@ -35,11 +37,9 @@ class AddModal extends Category
             <BasicAddModal
                 title='Add Category'
                 showModal={ this.props.showModal }
-                closeModal={ () => this.close() }
+                closeModal={ this.close.bind(this) }
                 bodyConfiguration={ this.inputFormConfiguration() }
-                onSend={ () => this.addItem() }
-                validateInput={ () => this.validateInput() }
-                onSubmit={ (event) => this.submitItem(event) } />      
+                footerConfiguration={ this.footerConfiguration() } />      
         )
     }
 }

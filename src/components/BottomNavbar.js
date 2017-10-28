@@ -7,21 +7,17 @@ import {
   Glyphicon
 } from 'react-bootstrap'
 
-const navItemStyle = {
-  width: '40em'
-}
-
 const BottomNavbar = () => (
-  <Navbar fixedBottom staticTop>
-    <Nav bsStyle="tabs">
-      <LinkContainer to='/locations' style={ navItemStyle }>
+  <Navbar fixedBottom staticTop >
+    <Nav bsStyle="tabs" justified>
+      <LinkContainer to='/locations'>
         <NavItem>
           <Glyphicon glyph="globe">
               Locations
           </Glyphicon>
         </NavItem>
       </LinkContainer>
-      <LinkContainer to='/categories' style={ navItemStyle }>
+      <LinkContainer to='/categories' >
           <NavItem>
             <Glyphicon glyph="flag">
               Categories

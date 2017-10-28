@@ -3,12 +3,12 @@ import { Form } from 'react-bootstrap'
 import Input from './Input'
 import SelectForm from './SelectForm'
 
-const BasicInputFormWithSelect = ({ configuration, onSubmit }) => (
-    <Form onSubmit={ (event) => onSubmit(event) }>
-        { configuration.inputs.map(item => (
+const BasicInputFormWithSelect = (props) => (
+    <Form onSubmit={ (event) => props.onSubmit(event) }>
+        { props.inputs.map(item => (
             <Input key={ item.id } { ...item } />
         ))}
-        { configuration.selects.map(item => (
+        { props.selects.map(item => (
             <SelectForm key={ item.id } {...item} />
         ))}
     </Form>

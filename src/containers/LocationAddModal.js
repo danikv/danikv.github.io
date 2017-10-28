@@ -5,6 +5,7 @@ import { addLocation } from '../actions/LocationActions'
 import { v4 } from 'node-uuid'
 import { BasicAddModalWithSelect } from '../components/BasicModals'
 import Location from '../components/Location'
+import { locationInputFormConfiguration } from './utils/CommonConfiguration'
 
 class AddModal extends Location
 {
@@ -29,49 +30,18 @@ class AddModal extends Location
     }
     
     inputFormConfiguration() {
+        return locationInputFormConfiguration(this,
+            this.state.name,
+            this.state.address,
+            this.state.lat,
+            this.state.long,
+            this.state.category)
+    }
+
+    fotterConfiguration() {
         return {
-            inputs: [{
-                validationMessage: 'name cannot be empry',
-                validation: () => this.validateName(),
-                id: 'name',
-                onChange: (event) => this.handleNameChange(event),
-                value: this.state.name,
-                type: "text"
-            },
-            {
-                validationMessage: 'address cannot be empry',
-                validation: () => this.validateAddress(),
-                id: 'address',
-                onChange: (event) => this.handleAddressChange(event),
-                value: this.state.address,
-                type: "text"
-            },
-            {
-                validationMessage: 'latitude cannot be empry',
-                validation: () => this.validateLatitude(),
-                id: 'Latitude',
-                onChange: (event) => this.handleLatitudeChange(event),
-                value: this.state.lat,
-                type: "number"
-            },
-            {
-                validationMessage: 'longitude cannot be empry',
-                validation: () => this.validateLongitude(),
-                id: 'Longitude',
-                onChange: (event) => this.handleLongitudeChange(event),
-                value: this.state.long,
-                type: "number"
-            }
-            ],
-            selects: [{
-                validationMessage: 'category cannot be empry',
-                validation: () => this.validateCategory(),
-                id: 'category',
-                onChange: (event) => this.handleCategoryChange(event),
-                options: this.props.categories,
-                value: this.state.category,
-                type: "text"
-            }]
+            onClick: this.addItem.bind(this),
+            disabled: !this.validateInput() 
         }
     }
 
@@ -87,12 +57,10 @@ class AddModal extends Location
             <BasicAddModalWithSelect
                 title='Add Location'
                 showModal={ this.props.showModal }
-                closeModal={ () => this.close() }
+                closeModal={ this.close.bind(this) }
                 bodyConfiguration={ this.inputFormConfiguration() }
-                onSend={ () => this.addItem() }
-                validateInput={ () => this.validateInput() }
-                onSubmit={ (event) => this.submitItem(event) }
-                onEntered={ () => this.open() } />      
+                footerConfiguration={ this.fotterConfiguration() }
+                onEntered={ this.open.bind(this) } />      
         )
     }
 }

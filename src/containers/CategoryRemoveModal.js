@@ -20,10 +20,18 @@ class RemoveModal extends Category
 
 
     deleteFormConfiguration() {
-        return [{
-            name: 'category',
-            value: this.state.category
-        }]
+        return {
+            configuration: [{
+                description: 'Category : ' + this.state.category,
+                name: 'category'
+            }]
+        }
+    }
+
+    footerConfiguration() {
+        return {
+            onClick: this.removeItem.bind(this)
+        } 
     }
 
     render() {
@@ -31,10 +39,10 @@ class RemoveModal extends Category
             <BasicRemoveModal
                 title='Remove Category'
                 showModal={ this.props.showModal }
-                closeModal={ () => this.close() }
+                closeModal={ this.close.bind(this) }
                 bodyConfiguration={ this.deleteFormConfiguration() }
-                onSend={ () => this.removeItem() }
-                onEntered={ () => this.open() } />   
+                footerConfiguration={ this.footerConfiguration() }
+                onEntered={ this.open.bind(this) } />   
         )
     }
 }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { removeLocation } from '../actions/LocationActions'
 import { BasicRemoveModal } from '../components/BasicModals'
 import Location from '../components/Location'
+import { locationLabaledFormConfiguration } from './utils/CommonConfiguration'
 
 class RemoveModal extends Location
 {
@@ -24,23 +25,17 @@ class RemoveModal extends Location
     }
 
     deleteFormConfiguration() {
-        return [{
-            name: 'name',
-            value: this.state.name
-        },{
-            name: 'address',
-            value: this.state.address
-        },{
-            name: 'latitude',
-            value: this.state.lat
-        },{
-            name: 'longitude',
-            value: this.state.long
-        },
-        {
-            name: 'category',
-            value: this.state.category
-        }]
+        return locationLabaledFormConfiguration(this.state.name,
+            this.state.address,
+            this.state.lat,
+            this.state.long,
+            this.state.category)
+    }
+
+    footerConfiguration() {
+        return {
+            onClick: this.removeItem.bind(this)
+        } 
     }
 
     render() {
@@ -48,11 +43,10 @@ class RemoveModal extends Location
             <BasicRemoveModal
                 title='Remove Location'
                 showModal={ this.props.showModal }
-                closeModal={ () => this.close() }
+                closeModal={ this.close.bind(this) }
                 bodyConfiguration={ this.deleteFormConfiguration() }
-                onSend={ () => this.removeItem() }
-                onEntered={ () => this.open() }
-                onSubmit={ (event) => this.submitItem(event) } />   
+                footerConfiguration={ this.footerConfiguration() }
+                onEntered={ this.open.bind(this) } />   
         )
     }
 }

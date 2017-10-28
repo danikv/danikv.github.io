@@ -2,15 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ViewList from '../components/ViewList'
-import {
-    Button,
-    Modal,
-    FormGroup,
-    ControlLabel,
-    Form
-} from 'react-bootstrap'
-import BasicRemoveForm from '../components/BasicRemoveForm'
 import FilterContainer from './Filter'
+import { LabeledModalWithoutButtons, LabeledModalWithMultipleButtons } from '../components/BasicModals'
+import { locationLabaledFormConfiguration } from './utils/CommonConfiguration'
 
 var groupArray = require('group-array')
 
@@ -131,26 +125,6 @@ class Locations extends Component
         this.close()
     }
 
-    deleteFormConfiguration() {
-        return [{
-            name: 'name',
-            value: this.locationClicked.name
-        },{
-            name: 'address',
-            value: this.locationClicked.address
-        },{
-            name: 'latitude',
-            value: this.locationClicked.lat
-        },{
-            name: 'longitude',
-            value: this.locationClicked.long
-        },
-        {
-            name: 'category',
-            value: this.locationClicked.category
-        }]
-    }
-
     onSubmit(event) {
         event.preventDefault()
         this.onSend()
@@ -160,6 +134,39 @@ class Locations extends Component
         this.setState({
             showViewModal: false
         })
+    }
+
+    labelFormConfiguration() {
+        return locationLabaledFormConfiguration(this.locationClicked.name,
+            this.locationClicked.address,
+            this.locationClicked.lat,
+            this.locationClicked.long,
+            this.locationClicked.category)
+    }
+
+    labeledConfiguration() {
+        return {
+            configuration: [{
+                name: "",
+                description: "Choose where would you like to see the item"
+            }]
+        }
+    }
+
+    footerConfiguration() {
+        return {
+            items: [{
+                configuration: {
+                    onClick: this.displayLocationOnMap.bind(this)
+                },
+                name: 'Map'
+            },{
+                configuration: {
+                    onClick: this.displayLocationOnModal.bind(this)
+                },
+                name: 'View'
+            }]
+        }
     }
 
     render() {
@@ -174,30 +181,21 @@ class Locations extends Component
                         displayFunction={ (location) => this.displayLocation(location) }
                     />
                 </div>
-                <Modal show={ this.state.showDisplayModal } onHide={ () => this.closeDisplayModal() }>
-                    <Modal.Title>
-                        View Location
-                    </Modal.Title>
-                    <Modal.Body>
-                        <Form>
-                            <FormGroup key={ 1 } controlId="formBasicText">
-                                <ControlLabel>Do you want to see the item in the map or in the view ? </ControlLabel>
-                            </FormGroup>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={ () => this.displayLocationOnMap() } pullLeft> Map </Button>
-                        <Button onClick={ () => this.displayLocationOnModal() } pullRight> View </Button>
-                    </Modal.Footer>
-                </Modal>
-                <Modal show={ this.state.showViewModal } onHide={ () => this.closeViewModal() }>
-                    <Modal.Title>
-                        View Location
-                    </Modal.Title>
-                    <Modal.Body>
-                        <BasicRemoveForm configuration={ this.deleteFormConfiguration() } />
-                    </Modal.Body>
-                </Modal>
+                <LabeledModalWithMultipleButtons
+                    title='View Location'
+                    showModal={ this.state.showDisplayModal }
+                    closeModal={ this.closeDisplayModal.bind(this) }
+                    bodyConfiguration={ this.labeledConfiguration() }
+                    footerConfiguration={ this.footerConfiguration() }
+                    onEntered={ () => {} } 
+                />
+                <LabeledModalWithoutButtons
+                    title='View Location'
+                    showModal={ this.state.showViewModal }
+                    closeModal={ this.closeViewModal.bind(this) }
+                    bodyConfiguration={ this.labelFormConfiguration() }
+                    onEntered={ () => {} } 
+                />   
             </div>
         )
     }

@@ -4,9 +4,9 @@ import {
 } from 'react-bootstrap'
 import Input from './Input'
 
-const BasicInputForm = ({ configuration, onSubmit }) => (
-    <Form onSubmit={ (event) => onSubmit(event) } >
-        { configuration.map(item => (
+const BasicInputForm = (props) => (
+    <Form onSubmit={ (event) => props.onSubmit(event) } >
+        { props.configuration.map(item => (
             <Input key={ item.id } { ...item } />
         ))}
     </Form>

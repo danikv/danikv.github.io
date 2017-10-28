@@ -4,9 +4,9 @@ import {
     ControlLabel
 } from 'react-bootstrap'
 
-const Label = ({ name , value }) => (
-    <FormGroup key={ name } controlId="formBasicText">
-        <ControlLabel>{ name } : { value } </ControlLabel>
+const Label = ({ description }) => (
+    <FormGroup controlId="formBasicText">
+        <ControlLabel> { description } </ControlLabel>
     </FormGroup>
 )
 

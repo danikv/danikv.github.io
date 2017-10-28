@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { editCategory } from '../actions/CategoryActions'
 import { BasicEditModal } from '../components/BasicModals'
 import Category from '../components/Category'
+import { categoryInputFormConfiguration } from './utils/CommonConfiguration'
 
 class EditModal extends Category 
 {
@@ -28,14 +29,15 @@ class EditModal extends Category
     }
 
     inputFormConfiguration() {
-        return [{
-            validationMessage: 'category cannot be empty or exsiting category',
-            validation: () => this.validateCategory(),
-            id: 'category',
-            onChange: (event) => this.categoryChange(event),
-            value: this.state.category,
-            type: "text"
-        }]
+        return categoryInputFormConfiguration(this,
+            this.state.category)
+    }
+
+    footerConfiguration() {
+        return {
+            onClick: this.editItem.bind(this),
+            disabled: !this.validateInput()
+        }
     }
 
     render() {
@@ -43,12 +45,11 @@ class EditModal extends Category
             <BasicEditModal
                 title='Edit Category'
                 showModal={ this.props.showModal }
-                closeModal={ () => this.close() }
+                closeModal={ this.close.bind(this) }
                 bodyConfiguration={ this.inputFormConfiguration() }
-                onSend={ () => this.editItem() }
-                validateInput={ () => this.validateInput() }
-                onEntered={ () => this.open() } 
-                onSubmit={ (event) => this.submitItem(event) } />   
+                footerConfiguration={ this.footerConfiguration() }
+                onEntered={ this.open.bind(this) }
+            />
         )
     }
 }
